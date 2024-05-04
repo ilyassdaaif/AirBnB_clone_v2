@@ -22,7 +22,7 @@ SERVER_CONFIG="server {
 	if (\$request_filename ~ redirect_me) {
 		rewrite ^ https://sketchfab.com/bluepeno/models permanent;
 	}
-	
+
 	location = /404.html {
 		root /var/www/error/;
 		internal;
