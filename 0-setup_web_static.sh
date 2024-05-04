@@ -1,4 +1,4 @@
-#!/usr/bin/env bash
+#!/use/bin/env bash
 # Installs, configures, and starts the web server
 SERVER_CONFIG="server {
 	listen 80 default_server;
@@ -22,7 +22,7 @@ SERVER_CONFIG="server {
 	if (\$request_filename ~ redirect_me) {
 		rewrite ^ https://sketchfab.com/bluepeno/models permanent;
 	}
-
+	
 	location = /404.html {
 		root /var/www/error/;
 		internal;
@@ -35,7 +35,7 @@ HOME_PAGE="<!DOCTYPE html>
 	</head>
 	<body>
 		<h1>Welcome to AirBnB!</h1>
-	<body>
+	</body>
 </html>
 "
 # shellcheck disable=SC2230
