@@ -5,7 +5,7 @@ from os.path import exists
 
 env.hosts = ['54.152.5.96-web-01', '100.25.4.103-web-02']  # Replace with actual IPs
 env.user = "ubuntu"  # Set as needed, or define in command line
-env.key_filename = "my_ssh_private_key"  # Set path to your SSH key, or define in command line
+env.key_filename = "SHA256:4b08kpK5h/nU7pcITJusjEF9Cloeq6H09iUzIYmcZK0"  # Set path to your SSH key, or define in command line
 
 def do_deploy(archive_path):
     # Check if the archive_path exists locally
