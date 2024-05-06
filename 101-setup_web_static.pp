@@ -1,29 +1,33 @@
+# Ensure the 'data' directory exists
 file { '/data':
-  ensure => 'directory',
+  ensure => directory,
   owner  => 'ubuntu',
   group  => 'ubuntu',
 }
 
+# Ensure the 'web_static' directory exists under '/data'
 file { '/data/web_static':
-  ensure => 'directory',
-  owner  => 'ubuntu',
-  group  => 'ubuntu',
-}
-
-file { '/data/web_static/releases':
-  ensure => 'directory',
+  ensure => directory,
   owner  => 'root',
   group  => 'root',
 }
 
+# Ensure 'releases' and 'shared' directories exist under '/data/web_static'
+file { ['/data/web_static/releases', '/data/web_static/shared']:
+  ensure => directory,
+  owner  => 'root',
+  group  => 'root',
+}
+
+# Ensure a test release directory exists and has an 'index.html' file
 file { '/data/web_static/releases/test':
-  ensure => 'directory',
+  ensure => directory,
   owner  => 'root',
   group  => 'root',
-}
-
+  require => File['/data/web_static/releases'],
+} ->
 file { '/data/web_static/releases/test/index.html':
-  ensure  => 'present',
+  ensure  => file,
   content => '<html>
                 <head>
                 </head>
@@ -33,37 +37,32 @@ file { '/data/web_static/releases/test/index.html':
               </html>',
   owner   => 'root',
   group   => 'root',
-  mode    => '0644',
 }
 
-file { '/data/web_static/shared':
-  ensure => 'directory',
-  owner  => 'root',
-  group  => 'root',
-}
-
+# Create a symbolic link from 'current' to the test release
 file { '/data/web_static/current':
-  ensure => 'link',
+  ensure => link,
   target => '/data/web_static/releases/test',
   owner  => 'root',
   group  => 'root',
+  require => File['/data/web_static/releases/test'],
 }
 
-# Configure Nginx to serve the content
-exec { 'nginx_config':
-  command => "/usr/sbin/nginx -s reload",
-  refreshonly => true,
-  subscribe => File['/data/web_static/releases/test/index.html'],
+# Configure nginx to serve the static files
+class { 'nginx':
+  manage_repo => true,
 }
 
-# Ensure nginx is installed and running
-package { 'nginx':
-  ensure => installed,
-}
-
-service { 'nginx':
-  ensure     => running,
-  enable     => true,
-  subscribe  => File['/data/web_static/releases/test/index.html'],
+nginx::resource::vhost { 'hbnb_static':
+  www_root => '/data/web_static/current',
+  index_files => ['index.html'],
+  server_name => ['localhost'],
+  locations => {
+    '/' => {
+      location_cfg_append => {
+        rewrite => '^/hbnb_static/(.*)$ /$1 break',
+      },
+    },
+  },
 }
 
