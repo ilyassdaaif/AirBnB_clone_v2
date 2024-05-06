@@ -1,68 +1,71 @@
-# Ensure the 'data' directory exists
-file { '/data':
-  ensure => directory,
-  owner  => 'ubuntu',
-  group  => 'ubuntu',
+# Puppet manifest to set up web static content for Holberton School project
+node '89-web-01' {
+
+  # Ensure the /data directory exists
+  file { '/data':
+    ensure => 'directory',
+    owner  => 'ubuntu',
+    group  => 'ubuntu',
+  }
+
+  # Ensure subdirectories /releases and /shared exist under /data/web_static
+  file { '/data/web_static':
+    ensure => 'directory',
+    owner  => 'ubuntu',
+    group  => 'ubuntu',
+  }
+
+  file { '/data/web_static/releases':
+    ensure => 'directory',
+    owner  => 'root',
+    group  => 'root',
+  }
+
+  file { '/data/web_static/shared':
+    ensure => 'directory',
+    owner  => 'root',
+    group  => 'root',
+  }
+
+  # Create a test release directory and an index.html within it
+  file { '/data/web_static/releases/test':
+    ensure => 'directory',
+    owner  => 'root',
+    group  => 'root',
+  }
+
+  file { '/data/web_static/releases/test/index.html':
+    ensure  => 'file',
+    content => '<html><head></head><body>Holberton School</body></html>',
+    owner   => 'root',
+    group   => 'root',
+  }
+
+  # Create a symbolic link to the test release
+  file { '/data/web_static/current':
+    ensure => 'link',
+    target => '/data/web_static/releases/test',
+    owner  => 'root',
+    group  => 'root',
+  }
+
+  # Install and configure Nginx if not already present
+  package { 'nginx':
+    ensure => installed,
+  }
+
+  # Configure Nginx to serve the static files
+  file { '/etc/nginx/sites-available/default':
+    content => template('path/to/your/nginx_default.erb'),
+    notify  => Service['nginx'],
+  }
+
+  service { 'nginx':
+    ensure => running,
+    enable => true,
+  }
+
 }
 
-# Ensure the 'web_static' directory exists under '/data'
-file { '/data/web_static':
-  ensure => directory,
-  owner  => 'root',
-  group  => 'root',
-}
-
-# Ensure 'releases' and 'shared' directories exist under '/data/web_static'
-file { ['/data/web_static/releases', '/data/web_static/shared']:
-  ensure => directory,
-  owner  => 'root',
-  group  => 'root',
-}
-
-# Ensure a test release directory exists and has an 'index.html' file
-file { '/data/web_static/releases/test':
-  ensure => directory,
-  owner  => 'root',
-  group  => 'root',
-  require => File['/data/web_static/releases'],
-} ->
-file { '/data/web_static/releases/test/index.html':
-  ensure  => file,
-  content => '<html>
-                <head>
-                </head>
-                <body>
-                  Holberton School
-                </body>
-              </html>',
-  owner   => 'root',
-  group   => 'root',
-}
-
-# Create a symbolic link from 'current' to the test release
-file { '/data/web_static/current':
-  ensure => link,
-  target => '/data/web_static/releases/test',
-  owner  => 'root',
-  group  => 'root',
-  require => File['/data/web_static/releases/test'],
-}
-
-# Configure nginx to serve the static files
-class { 'nginx':
-  manage_repo => true,
-}
-
-nginx::resource::vhost { 'hbnb_static':
-  www_root => '/data/web_static/current',
-  index_files => ['index.html'],
-  server_name => ['localhost'],
-  locations => {
-    '/' => {
-      location_cfg_append => {
-        rewrite => '^/hbnb_static/(.*)$ /$1 break',
-      },
-    },
-  },
-}
-
+# You need to provide the 'nginx_default.erb' template file for Nginx configuration
+# Ensure it is configured to serve the '/data/web_static/current' directory under an alias like '/hbnb_static'
