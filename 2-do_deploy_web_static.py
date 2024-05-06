@@ -3,7 +3,7 @@
 from fabric.api import env, run, put, local
 from os.path import exists
 
-env.hosts = ['xx-web-01', 'xx-web-02']  # Replace with actual IPs
+env.hosts = ['54.152.5.96-web-01', '100.25.4.103-web-02']  # Replace with actual IPs
 env.user = "ubuntu"  # Set as needed, or define in command line
 env.key_filename = "my_ssh_private_key"  # Set path to your SSH key, or define in command line
 
