@@ -1,5 +1,3 @@
-<<<<<<< HEAD
-=======
 #!/usr/bin/python3
 """
 Fabric script to clean up old archives of web static files from deployment.
@@ -36,4 +34,3 @@ def do_clean(number=0):
         print("Warning: The current symlink is broken. You may need to redeploy the static content.")
 
 # Additional deployment tasks can be defined here as needed
->>>>>>> fb14dd277d08a082f2f5c3dd72d499c12f8df1b6
