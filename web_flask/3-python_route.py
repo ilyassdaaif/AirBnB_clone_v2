@@ -1,5 +1,6 @@
+
 #!/usr/bin/python3
-""" Starts a Flask web application. """
+""" 3. Add third view func that redirects and has default val for variable """
 
 from flask import Flask
 
@@ -26,12 +27,13 @@ def c_text(text):
     text = text.replace('_', ' ')
     return 'C {}'.format(text)
 
+
 @app.route('/python/')
 @app.route('/python/<text>')
 def python_text(text='is cool'):
     """ replace more text with another variable. """
     text = text.replace('_', ' ')
-    return 'python {}'.format(text)
+    return 'Python {}'.format(text)
 
 
 if __name__ == '__main__':
