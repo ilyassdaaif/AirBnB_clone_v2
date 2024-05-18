@@ -1,15 +1,17 @@
 <!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>HBNB</title>
-</head>
-<body>
-    <h1>States</h1>
-    <ul>
-    {% for state in states %}
-        <li>{{ state.id }}: <b>{{ state.name }}</b></li>
-    {% endfor %}
-    </ul>
-</body>
-</html>
+<HTML lang="en">
+	<HEAD>
+		<META charset="UTF-8" />
+		<META http-equiv="X-UA-Compatible" content="IE=edge" />
+		<META name="viewport" content="width=device-width, initial-scale=1.0" />
+		<TITLE>HBNB</TITLE>
+	</HEAD>
+	<BODY>
+		<H1>{{ Table }}</H1>
+		<UL>
+			{% for state in states.values() | sort(attribute="name") %}
+			<LI>{{ state.id }}: <B>{{ state.name }}</B></LI>
+			{% endfor %}
+		</UL>
+	</BODY>
+</HTML>
