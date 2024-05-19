@@ -1,9 +1,9 @@
 #!/usr/bin/python3
 """
-starts a Flask web application.
+starts a Flask web application
 """
 
-from flaks import Flask, render_template
+from flask import Flask, render_template
 from models import *
 from models import storage
 app = Flask(__name__)
@@ -17,7 +17,7 @@ def cities_by_states():
 
 
 @app.teardown_appcontext
-def teardown_db(exeption):
+def teardown_db(exception):
     """closes the storage on teardown"""
     storage.close()
 
