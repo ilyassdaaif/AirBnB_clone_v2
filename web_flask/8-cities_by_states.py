@@ -1,5 +1,3 @@
-<<<<<<< HEAD
-=======
 #!/usr/bin/python3
 """Starts a Flask web application.
 
@@ -31,5 +29,4 @@ def teardown(exc):
 
 
 if __name__ == "__main__":
-    app.run(host="0.0.0.0")
->>>>>>> 417060325d90c8f5c61f4be9c531adf74c903fec
+    app.run(host='0.0.0.0', port=5000)
